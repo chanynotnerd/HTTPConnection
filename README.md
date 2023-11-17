@@ -1,5 +1,9 @@
 # HTTP Connection
 ---
+#### 실행결과
+
+![개발자도구 내 200 응답 확인](https://github.com/chanynotnerd/HTTPConnection/assets/63177308/ebb5ae3e-7c53-46b1-888c-0872485ffef4)
+****
 #### C++를 사용하여 TCP 서버 구현, HTML 파일 랜더링
 
 > 1. 클라이언트가 서버에 접속 / 서버의 IP, Port 주소 사용
