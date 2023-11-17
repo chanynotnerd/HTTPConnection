@@ -21,13 +21,15 @@ string getResponse(const std::string& filePath)
         return "HTTP/1.1 404 Not Found\r\n\r\n"; // 파일을 찾을 수 없는 경우 404 응답 반환
     }
 
+    
     string response;
     string line;
+    
     while (getline(file, line))
     {
         response += line;
     }
-
+    
     file.close();
 
     return "HTTP/1.1 200 OK\r\n\r\n" + response; // 파일을 찾은 경우 200 응답과 파일 내용 반환

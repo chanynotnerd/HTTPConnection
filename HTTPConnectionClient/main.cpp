@@ -8,7 +8,6 @@ using namespace std;
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 7777
-#define FILE_PATH "C:\\Works\\HTTPConnection\\index.html"
 
 int main() {
     // Winsock 초기화
@@ -45,9 +44,22 @@ int main() {
         return 1;
     }
 
+    // GET 요청 전송
+    string getRequest = "GET / HTTP/1.1\r\n"
+        "Host: localhost\r\n"
+        "Connection: close\r\n"
+        "\r\n";
+    int bytesSent = send(clientSocket, getRequest.c_str(), getRequest.length(), 0);
+    if (bytesSent == SOCKET_ERROR) {
+        cerr << "요청 보내기 실패" << endl;
+        closesocket(clientSocket);
+        WSACleanup();
+        return 1;
+    }
+
     // 서버로부터 데이터 받기
     char buffer[4096];
-    std::string response;
+    string response;
 
     while (true) {
         memset(buffer, 0, sizeof(buffer));
@@ -59,14 +71,15 @@ int main() {
     }
 
     // 응답 출력
-    std::cout << "Server response:" << std::endl;
-    std::cout << response << std::endl;
+    cout << "Server response:" << endl;
+    cout << response << endl;
 
+    
     // 소켓 닫기
     closesocket(clientSocket);
 
     // Winsock 정리
     WSACleanup();
-
+    
     return 0;
 }
