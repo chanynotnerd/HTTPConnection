@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
@@ -61,6 +62,7 @@ int main() {
     char buffer[4096];
     string response;
 
+    // recv() 루프로 돌려 상시 응답 받게끔 수정 중
     while (true) {
         memset(buffer, 0, sizeof(buffer));
         int bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
@@ -68,6 +70,21 @@ int main() {
             break;
         }
         response += buffer;
+
+        // Content-Length 필드 확인
+        size_t contentLengthPos = response.find("Content-Length: ");
+        if (contentLengthPos != string::npos) {
+            size_t endOfLinePos = response.find("\r\n", contentLengthPos);
+            if (endOfLinePos != string::npos) {
+                string contentLengthStr = response.substr(contentLengthPos + 16, endOfLinePos - contentLengthPos - 16);
+                size_t contentLength = strtoul(contentLengthStr.c_str(), nullptr, 10);
+
+                // 수신한 데이터 크기가 Content-Length와 같으면 루프를 종료
+                if (response.length() >= endOfLinePos + 4 + contentLength) {
+                    break;
+                }
+            }
+        }
     }
 
     // 응답 출력
@@ -77,7 +94,6 @@ int main() {
     
     // 소켓 닫기
     closesocket(clientSocket);
-
     // Winsock 정리
     WSACleanup();
     
