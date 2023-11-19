@@ -2,7 +2,7 @@
 ---
 #### 실행결과
 
-![개발자도구 내 200 응답 확인](https://github.com/chanynotnerd/HTTPConnection/assets/63177308/ebb5ae3e-7c53-46b1-888c-0872485ffef4)
+![개발자도구 내 200 응답 확인](https://github.com/chanynotnerd/HTTPConnection/assets/63177308/32dd7d29-fc6b-4c20-87c5-c78988ae8619)
 ****
 #### C++를 사용하여 TCP 서버 구현, HTML 파일 랜더링
 
