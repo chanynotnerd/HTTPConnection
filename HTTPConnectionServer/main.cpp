@@ -13,17 +13,18 @@ using namespace std;
 #define FILE_PATH "C:\\Works\\HTTPConnection\\welcome.html"
 
 
+// HTTP 응답 메세지 생성 함수, 파일 경로 매개변수
 string getResponse(const std::string& filePath)
 {
-    ifstream file(filePath);
+    ifstream file(filePath);    // 파일 스트림 생성 및 파일 읽기모드 연결
     if (!file.is_open())
     {
         return "HTTP/1.1 404 Not Found\r\n\r\n"; // 파일을 찾을 수 없는 경우 404 응답 반환
     }
-    file.close();
+    file.close();   // 파일 스트림 셧다운
 
-    return "HTTP/1.1 200 OK\r\n\r\nHello, Client!"; // 파일을 찾은 경우 200 응답과 파일 내용 반환
-    // return "HTTP/1.1 200 OK\r\nConnection: keep-alive\r\n\r\n" + response; // 파일을 찾은 경우 200 응답과 파일 내용 반환 (Connection: keep-alive 추가)
+    return "HTTP/1.1 200 OK\r\n\r\nHello, Client!"; // 파일을 찾은 경우 200 응답 반환
+    // return "HTTP/1.1 200 OK\r\nConnection: keep-alive\r\n\r\n" + response; // 파일을 찾은 경우 200 응답 반환 (Connection: keep-alive 추가)
 }
 
 int main()
@@ -70,8 +71,7 @@ int main()
     cout << "Server Running " << SERVER_IP << ":" << SERVER_PORT << endl;
 
     while (true) {
-        // 클라이언트 연결 수락
-        int clientSocket = accept(serverSocket, nullptr, nullptr);
+        int clientSocket = accept(serverSocket, nullptr, nullptr);   // 클라이언트 연결 수락
         if (clientSocket < 0)
         {
             cerr << "연결 수락 안되는데" << endl;
@@ -88,7 +88,7 @@ int main()
             continue;
         }
 
-        // 요청 메시지 파싱
+        // 클라이언트로부터 수신 요청 문자열로 반환
         string request(buffer);
 
         // URL 경로 추출

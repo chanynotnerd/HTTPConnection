@@ -59,13 +59,14 @@ int main() {
 		return 1;
 	}
 
-	// GET 요청 전송
+	// GET 요청 전송, 서버에게 루트 경로의 리소스 요청 부분.
 	string getRequest = "GET / HTTP/1.1\r\n"
 		"Host: localhost\r\n"
-		"Connection: close\r\n"
+		"Connection: close\r\n"	// Connection: close는 요청 이후 연결 끊으라고.
 		// "Connection: keep-alive\r\n"
 		"\r\n";
-	int bytesSent = send(clientSocket, getRequest.c_str(), getRequest.length(), 0);
+
+	int bytesSent = send(clientSocket, getRequest.c_str(), getRequest.length(), 0);	// 생성한 요청 메세지를 서버에 전송.
 	if (bytesSent == SOCKET_ERROR) {
 		cerr << "요청 보내기 실패" << endl;
 		closesocket(clientSocket);
@@ -73,7 +74,7 @@ int main() {
 		return 1;
 	}
 
-	// 서버로부터 데이터 받기
+	// 서버로부터 데이터 받기, while() 반복문을 통해 실제 받은 바이트 수 전체 반환.
 	char buffer[4096];
 	string response;
 
