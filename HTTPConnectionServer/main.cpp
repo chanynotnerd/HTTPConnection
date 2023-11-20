@@ -20,19 +20,10 @@ string getResponse(const std::string& filePath)
     {
         return "HTTP/1.1 404 Not Found\r\n\r\n"; // 파일을 찾을 수 없는 경우 404 응답 반환
     }
-
-    
-    string response;
-    string line;
-    
-    while (getline(file, line))
-    {
-        response += line;
-    }
-    
     file.close();
 
-    return "HTTP/1.1 200 OK\r\n\r\n" + response; // 파일을 찾은 경우 200 응답과 파일 내용 반환
+    return "HTTP/1.1 200 OK\r\n\r\nHello, Client!"; // 파일을 찾은 경우 200 응답과 파일 내용 반환
+    // return "HTTP/1.1 200 OK\r\nConnection: keep-alive\r\n\r\n" + response; // 파일을 찾은 경우 200 응답과 파일 내용 반환 (Connection: keep-alive 추가)
 }
 
 int main()
@@ -123,4 +114,47 @@ int main()
     closesocket(serverSocket);
 
     return 0;
+    /*  Keep Alive 루프문 설정 시
+    while (true) {
+        // 클라이언트 연결 수락
+        int clientSocket = accept(serverSocket, nullptr, nullptr);
+        if (clientSocket < 0)
+        {
+            cerr << "연결 수락 안되는데" << endl;
+            continue;
+        }
+
+        while (true) {
+            // 클라이언트로부터 요청 받기
+            char buffer[4096];
+            memset(buffer, 0, sizeof(buffer));
+            int bytesRead = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+            if (bytesRead <= 0)
+            {
+                break;
+            }
+
+            // 요청 메시지 파싱
+            string request(buffer);
+
+            // URL 경로 추출
+            string url;
+            size_t start = request.find("GET ") + 4;
+            size_t end = request.find(" HTTP/1.1");
+            if (start != string::npos && end != string::npos)
+            {
+                url = request.substr(start, end - start);
+            }
+
+            // 응답 생성
+            string response = getResponse(FILE_PATH);
+
+            // 클라이언트에 응답 전송
+            send(clientSocket, response.c_str(), response.length(), 0);
+        }
+
+        // 클라이언트 소켓 닫기
+        closesocket(clientSocket);
+    }
+    */
 }
